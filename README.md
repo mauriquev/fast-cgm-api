@@ -8,4 +8,4 @@ The packages that this application will be using:
 - uvicorn
 - sqlalchemy
 - psycopg2-binary
-- pydexcom
+- pydexcom (https://github.com/gagebenne/pydexcom)
