@@ -4,6 +4,7 @@ FastAPI Dexcom G7 python application to retrieve ans store data in PostgreSQL
 
 ## Packages
 The packages that this application will be using:
+IMPORTANT read the pydexcom for the initial setup using dexcom api
 - fastapi
 - uvicorn
 - sqlalchemy
