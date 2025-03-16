@@ -17,6 +17,7 @@ ENV/
 
 # Configuration files with sensitive information
 config.py
+test.py
 
 # Local development settings
 .env
