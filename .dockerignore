@@ -1,0 +1,35 @@
+# Development files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+.env
+.venv/
+venv/
+ENV/
+
+# Version control
+.git/
+.gitignore
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Documentation/configuration files
+README.md
+LICENSE
+
+# Testing files
+test.py
+
+# Keep these files out of dockerignore since they're needed
+# database.py
+# main.py
+# models.py
+# requirements.txt
+# Dockerfile

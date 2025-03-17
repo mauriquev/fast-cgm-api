@@ -1,8 +1,23 @@
+import os 
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from config import DB_PASSWORD, DB_USER, DB_HOST, DB_PORT, DB_NAME
+def clean_env(var_name):
+    value = os.environ.get(var_name)
+    if value is None:
+        raise ValueError(f"Environment variable {var_name} is required but not set")
+    # Remove surrounding quotes if present
+    if isinstance(value, str) and value.startswith(("'", '"')) and value.endswith(("'", '"')):
+        value = value[1:-1]
+    return value
+
+# from config import DB_PASSWORD, DB_USER, DB_HOST, DB_PORT, DB_NAME
+DB_USER = clean_env("DB_USER")
+DB_PASSWORD = clean_env("DB_PASSWORD")
+DB_HOST = clean_env("DB_HOST")
+DB_PORT = clean_env("DB_PORT")
+DB_NAME = clean_env("DB_NAME")
 
 DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
