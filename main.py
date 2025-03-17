@@ -8,15 +8,17 @@ from database import engine, get_db
 from pydantic import BaseModel
 import threading
 import time
+import os
 
-# Import Dexcom credentials from config
-from config import DEXCOM_USERNAME, DEXCOM_PASSWORD
+# Dexcom credentials from environment variables
+DEXCOM_USERNAME = os.environ.get("DEXCOM_USERNAME", "")
+DEXCOM_PASSWORD = os.environ.get("DEXCOM_PASSWORD", "")
 
 # Create database tables
 models.Base.metadata.create_all(bind=engine)
 
-# Create FastAPI application
-app = FastAPI(title="Glucose Tracker")
+# Creates FastAPI application
+app = FastAPI(title="Fast CGM API")
 
 # Pydantic model for response data
 class GlucoseReadingResponse(BaseModel):
@@ -31,17 +33,18 @@ class GlucoseReadingResponse(BaseModel):
     class Config:
         orm_mode = True  # Allows the Pydantic model to read data from ORM objects
 
-# Function to connect to Dexcom
+# Function to connect to Dexcom, creates connection to Dexcom API
 def get_dexcom():
-    """Create and return a Dexcom API connection"""
     try:
-        # Use keyword arguments instead of positional arguments
+        if not DEXCOM_USERNAME or not DEXCOM_PASSWORD:
+            raise ValueError("Dexcom credentials not set. Please set DEXCOM_USERNAME and DEXCOM_PASSWORD environment variables.")
+    
         dexcom = Dexcom(username=DEXCOM_USERNAME, password=DEXCOM_PASSWORD)
         return dexcom
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to connect to Dexcom: {str(e)}")
 
-# Background thread function to sync data
+# Background thread function to sync data (infinite loop)
 def sync_dexcom_data():
     """Background thread function to sync data from Dexcom periodically"""
     while True:
@@ -94,7 +97,7 @@ def read_root():
     """Welcome message endpoint"""
     return {"message": "Welcome to the Glucose Tracker API"}
 
-# Get the current glucose reading
+# Get current glucose reading
 @app.get("/readings/current", response_model=GlucoseReadingResponse)
 def get_current_reading(db: Session = Depends(get_db)):
     """Get the most recent glucose reading"""
@@ -103,7 +106,7 @@ def get_current_reading(db: Session = Depends(get_db)):
         models.GlucoseReading.timestamp.desc()
     ).first()
     
-    # If no readings in database, fetch from Dexcom
+    # If no readings in database, gets it from Dexcom 
     if not reading:
         dexcom = get_dexcom()
         glucose = dexcom.get_current_glucose_reading()
@@ -146,7 +149,7 @@ def sync_readings(db: Session = Depends(get_db)):
     
     count = 0
     for glucose in readings:
-        # Check if we already have this reading
+        # Checks if reading already exists
         existing = db.query(models.GlucoseReading).filter(
             models.GlucoseReading.timestamp == glucose.datetime
         ).first()
