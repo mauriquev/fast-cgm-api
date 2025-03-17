@@ -2,7 +2,7 @@
 FastAPI Dexcom G7 python application to retrieve ans store data in PostgreSQL
 
 ### updates
-- removed config.py, as now the app can use enviorent variables.
+- removed config.py, as now the app can use enviorment variables.
 - make .env file for local testing 
 
 ## Packages
