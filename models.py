@@ -4,7 +4,7 @@ from datetime import datetime
 
 from database import Base
 
-class GlucoseReadings(Base):
+class GlucoseReading(Base):
     __tablename__ = 'glucose_readings'
 
     id = Column(Integer, primary_key=True, index=True)
