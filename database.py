@@ -1,6 +1,6 @@
 import os 
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 def clean_env(var_name):
@@ -12,7 +12,6 @@ def clean_env(var_name):
         value = value[1:-1]
     return value
 
-# from config import DB_PASSWORD, DB_USER, DB_HOST, DB_PORT, DB_NAME
 DB_USER = clean_env("DB_USER")
 DB_PASSWORD = clean_env("DB_PASSWORD")
 DB_HOST = clean_env("DB_HOST")
