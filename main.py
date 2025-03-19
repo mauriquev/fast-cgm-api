@@ -15,7 +15,8 @@ DEXCOM_USERNAME = os.environ.get("DEXCOM_USERNAME", "")
 DEXCOM_PASSWORD = os.environ.get("DEXCOM_PASSWORD", "")
 
 # Create database tables
-models.Base.metadata.create_all(bind=engine)
+def setup_database():
+    models.Base.metadata.create_all(bind=engine)
 
 # Creates FastAPI application
 app = FastAPI(title="Fast CGM API")
@@ -88,6 +89,8 @@ def sync_dexcom_data():
 @app.on_event("startup")
 def startup_event():
     """Runs when the FastAPI application starts up"""
+    setup_database()
+
     thread = threading.Thread(target=sync_dexcom_data, daemon=True)
     thread.start()
 
@@ -114,7 +117,7 @@ def get_current_reading(db: Session = Depends(get_db)):
         if not glucose:
             raise HTTPException(status_code=404, detail="No glucose reading available")
             
-        # If  a new reading it fetched it is saved to database
+        # If  a new reading it fetched saves it to the database
         reading = models.GlucoseReading(
             value=glucose.value,
             timestamp=glucose.datetime,
@@ -247,3 +250,5 @@ def get_daily_stats(days: int = 7, db: Session = Depends(get_db)):
     # Sort by date
     result.sort(key=lambda x: x["date"])
     return result
+if __name__ == "__main__":
+    setup_database()
