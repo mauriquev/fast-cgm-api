@@ -14,7 +14,7 @@ import os
 DEXCOM_USERNAME = os.environ.get("DEXCOM_USERNAME", "")
 DEXCOM_PASSWORD = os.environ.get("DEXCOM_PASSWORD", "")
 
-# Create database tables
+# Changed databse initialization to use a function instead of creating tables at import time
 def setup_database():
     models.Base.metadata.create_all(bind=engine)
 
