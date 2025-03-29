@@ -27,11 +27,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r ./tests/requirements.txt
       
-      - name: Run tests 
+      - name: Run Tests 
         run: |
           pytest tests/ -v > test_output.log
 
-      - name: Upload test results 
+      - name: Upload Test Results 
         uses: actions/upload-artifact@v3
         with: 
           name: test-results
