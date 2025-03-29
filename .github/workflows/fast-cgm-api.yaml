@@ -8,7 +8,7 @@ on:
     # paths:
       
 jobs:
-  tests:
+  Tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -22,14 +22,14 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r tests/requirements.txt
+          pip install -r ./tests/requirements.txt
       
       - name: Run tests 
         run: |
           pytest test/ -v test_output.log
 
-      # - name: Upload test results 
-      #   run: actions/upload-artifact@v3
-      #   with: 
-      #     name: test-results
-      #     path: test_output.log
+      - name: Upload test results 
+        uses: actions/upload-artifact@v3
+        with: 
+          name: test-results
+          path: test_output.log
