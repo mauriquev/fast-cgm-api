@@ -3,3 +3,4 @@ pytest-cov
 fastapi
 sqlalchemy
 httpx 
+psycopg2
