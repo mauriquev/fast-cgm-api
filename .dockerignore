@@ -21,13 +21,39 @@ ENV/
 *.swo
 
 # Documentation/configuration files
-README.md
-LICENSE
+README.md  
+LICENSE    
 
 # Testing files
 test.py
+tests/
+.pytest_cache/
+.coverage
+htmlcov/
+test_output.log
 
-# Keep these files out of dockerignore since they're needed
+# Docker-related files
+.dockerignore
+docker-compose*.yml
+
+# Cache and temporary files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.cache/
+
+# Local development configurations
+.env.local
+.env.development
+.env.test
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Files to keep out of dockerignore
 # database.py
 # main.py
 # models.py
