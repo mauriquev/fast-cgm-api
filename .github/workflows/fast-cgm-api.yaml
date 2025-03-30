@@ -36,9 +36,9 @@ jobs:
           pip install -r ./tests/requirements.txt
 
       # To test in case of errors with pytest
-      # - name: Run test with verbose output
-      #   run: |
-      #     pytest tests/test_database.py -xvs 2>&1 | tee test_output.log
+      - name: Run test with verbose output
+        run: |
+          pytest tests/ -xvs 2>&1 | tee test_output.log
 
       - name: Run Tests 
         run: |
