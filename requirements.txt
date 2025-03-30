@@ -5,3 +5,4 @@ pydantic
 pydexcom
 python-dotenv
 psycopg2-binary
+setuptools>=70.0.0

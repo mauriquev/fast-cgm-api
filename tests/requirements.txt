@@ -4,4 +4,3 @@ fastapi
 sqlalchemy
 httpx 
 psycopg2
-setuptools>=70.0.0
