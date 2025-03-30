@@ -36,9 +36,9 @@ jobs:
           pip install -r ./tests/requirements.txt
 
       # To test in case of errors with pytest
-      - name: Run test with verbose output
-        run: |
-          pytest tests/ -xvs 2>&1 | tee test_output.log
+      # - name: Run test with verbose output
+      #   run: |
+      #     pytest tests/ -xvs 2>&1 | tee test_output.log
 
       - name: Run Tests 
         run: |
@@ -52,7 +52,7 @@ jobs:
           retention-days: 1
         
   Build:
-    name: Build and Scan Docker Image
+    name: Docker Build and Trivy Scan
     needs: Tests
     runs-on: ubuntu-latest
     steps:
@@ -81,3 +81,10 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
+
+      - name: Docker Push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/fast-cgm-api:${{ github.sha }}
