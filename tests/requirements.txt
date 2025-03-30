@@ -4,3 +4,4 @@ fastapi
 sqlalchemy
 httpx 
 psycopg2
+pydexcom
