@@ -101,15 +101,17 @@ jobs:
 
       - name: Update Image Tag and Push
         run: |
-          # Update image tag in deployment file
-          sed -i "s|image: ${{ vars.DOCKERHUB_USERNAME }}/fast-cgm-api:.*|image: ${{ vars.DOCKERHUB_USERNAME }}/fast-cgm-api:${{ github.sha }}|g" fast-cgm-api/deployment.yaml
-          
+          # Create a shorter SHA
+          SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
+        
+          # Update image tag in deployment file with shorter SHA
+          sed -i "s|image: ${{ vars.DOCKERHUB_USERNAME }}/fast-cgm-api:.*|image: ${{ vars.DOCKERHUB_USERNAME }}/fast-cgm-api:${SHORT_SHA}|g" fast-cgm-api/deployment.yaml
+        
           # Configure git and push if there are changes
           git config --global user.name "${{ vars.GIT_USER_NAME }}"
           git config --global user.email "${{ vars.GIT_USER_EMAIL }}"
           git add fast-cgm-api/deployment.yaml
-          git diff --staged --quiet || git commit -m "Update fast-cgm-api image to ${{ github.sha }}" && git push
-            
-        
+          git diff --staged --quiet || git commit -m "Update fast-cgm-api image to ${SHORT_SHA}" && git push
+          
 
       
