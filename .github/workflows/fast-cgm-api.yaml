@@ -49,8 +49,7 @@ jobs:
         with: 
           name: test-results
           path: test_output.log
-          retention-days: 1
-        
+          retention-days: 1 
   Build:
     name: Docker Build and Trivy Scan
     needs: Tests
@@ -88,3 +87,29 @@ jobs:
           context: .
           push: true
           tags: ${{ vars.DOCKERHUB_USERNAME }}/fast-cgm-api:${{ github.sha }}
+  Update-Image-Manifest:
+    name: Update K8s Manifest
+    needs: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout K8s Manifests Repo
+        uses: actions/checkout@v4
+        with:
+          repository: mauriquev/k8s-manifests
+          token: ${{ secrets.MANIFEST_REPO_PAT }}
+          ref: 'main'
+
+      - name: Update Image Tag and Push
+        run: |
+          # Update image tag in deployment file
+          sed -i "s|image: ${{ vars.DOCKERHUB_USERNAME }}/fast-cgm-api:.*|image: ${{ vars.DOCKERHUB_USERNAME }}/fast-cgm-api:${{ github.sha }}|g" fast-cgm-api/deployment.yaml
+          
+          # Configure git and push if there are changes
+          git config --global user.name "${{ vars.GIT_USER_NAME }}"
+          git config --global user.email "${{ vars.GIT_USER_EMAIL }}"
+          git add fast-cgm-api/deployment.yaml
+          git diff --staged --quiet || git commit -m "Update fast-cgm-api image to ${{ github.sha }}" && git push
+            
+        
+
+      
