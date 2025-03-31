@@ -1,11 +1,17 @@
 name: FastCGM API CI
 
 on:
-  # workflow_dispatch:
+  workflow_dispatch:
   push:
     branches:
       - dev
-    # paths:
+    paths:
+      - Dockerfile
+      - main.py
+      - tests/*
+      - requirements.txt
+      - database.py
+      - models.py
       
 jobs:
   Tests:
