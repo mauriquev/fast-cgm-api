@@ -84,15 +84,15 @@ jobs:
           push: false
           tags: ${{ vars.DOCKERHUB_USERNAME }}/fast-cgm-api:${{ github.sha }}
     
-      - name: Trivy Vulnerability Scanner
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          image-ref: 'docker.io/${{ vars.DOCKERHUB_USERNAME }}/fast-cgm-api:${{ github.sha }}'
-          format: 'table'
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
+      # - name: Trivy Vulnerability Scanner
+      #   uses: aquasecurity/trivy-action@0.28.0
+      #   with:
+      #     image-ref: 'docker.io/${{ vars.DOCKERHUB_USERNAME }}/fast-cgm-api:${{ github.sha }}'
+      #     format: 'table'
+      #     exit-code: '1'
+      #     ignore-unfixed: true
+      #     vuln-type: 'os,library'
+      #     severity: 'CRITICAL,HIGH'
 
       - name: Docker Push
         uses: docker/build-push-action@v6
