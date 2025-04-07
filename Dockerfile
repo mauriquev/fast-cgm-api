@@ -1,7 +1,6 @@
-FROM python:3.12-slim
+FROM python:3.12-alpine
 WORKDIR /app
-RUN apt-get update && apt-get upgrade -y && apt-get clean
-
+RUN apk update && apk upgrade xz-libs && rm -rf /var/cache/apk/*
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt && \
     rm -rf /root/.cache/pip
