@@ -13,7 +13,6 @@ on:
       - database.py
       - models.py
       - .github/workflows/fast-cgm-api.yaml
-      
 jobs:
   Tests:
     runs-on: ubuntu-latest
@@ -64,16 +63,13 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
-        
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-        
+
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-          
+
       - name: Docker Build
         uses: docker/build-push-action@v6
         with:
@@ -81,7 +77,7 @@ jobs:
           platforms: linux/amd64
           push: false
           tags: ${{ vars.DOCKERHUB_USERNAME }}/fast-cgm-api:${{ github.sha }}
-          
+    
       - name: Trivy Vulnerability Scanner
         uses: aquasecurity/trivy-action@0.28.0
         with:
@@ -91,7 +87,7 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
-          
+
       - name: Docker Push
         uses: docker/build-push-action@v6
         with:
@@ -99,7 +95,7 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: ${{ vars.DOCKERHUB_USERNAME }}/fast-cgm-api:${{ github.sha }}
-
+          
   Update-Image-Manifest:
     name: Update K8s Manifest
     needs: Build
