@@ -1,5 +1,6 @@
 FROM python:3.12-alpine
 WORKDIR /app
+RUN apk update && apk upgrade xz-libs && rm -rf /var/cache/apk/*
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt && \
     rm -rf /root/.cache/pip
